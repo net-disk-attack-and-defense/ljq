@@ -34,33 +34,34 @@ public class Login extends HttpServlet {
             SpiderState = 1;
         }
         if (SpiderState==0) {
-            String username = request.getParameter("username");
+            String email = request.getParameter("email");
             String password = request.getParameter("password");
+            //TODO 没有验证账户密码长度，尚不知有无问题
             Connection conn = null;
             PreparedStatement ps = null;
             ResultSet rs = null;
             try {
                 String path = this.getServletContext().getRealPath("/WEB-INF/classes/DB_Info.properties");
-                Username_Check check = new Username_Check(username, path);
+                Email_Check check = new Email_Check(email, path);
                 if (check.check()) {
                     DB_Connect connect = new DB_Connect();
                     conn = connect.connect(path);
-                    String sql = "select*from userinfo where username=? and password=?";//?是占位符
+                    String sql = "select*from users where email=? and passwd=?";//?是占位符
                     ps = conn.prepareStatement(sql);
                     //给占位符？传值，第一个问号下标是1，jdbc的下标从1开始
-                    ps.setString(1, username);
+                    ps.setString(1, email);
                     ps.setString(2, password);
                     rs = ps.executeQuery();
                     if (rs.next()) {
-                        HttpSession session = request.getSession() ;
-                        if (!session.isNew()){  //如果session不是新的，那么失效上一个session并再次创建
-                            session.invalidate();
-                            session = request.getSession() ;
+                        HttpSession session = request.getSession();
+                        if (!session.isNew()) {  //如果session不是新的，那么失效上一个session并再次创建
+                            session.invalidate();//TODO 此方法只是删除ID属性值，未真正删除ID，尚不知会不会有问题
+                            session = request.getSession();
                         }
                         session.setMaxInactiveInterval(60);//session时长设置为5分钟
-                        session.setAttribute("username",username);
-                        //response.sendRedirect("SUI");
-                        request.getRequestDispatcher("SUI").forward(request,response);
+                        session.setAttribute("username", rs.getString("name"));
+                        response.sendRedirect("SUI");
+                        //request.getRequestDispatcher("SUI").forward(request,response);
                     } else {
                         response.sendRedirect("wrongpassword.html"); //重定向到密码错误页面
                     }
