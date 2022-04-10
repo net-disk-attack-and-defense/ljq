@@ -16,15 +16,16 @@ import java.sql.SQLException;
 public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         int SpiderState = 0;
         try {
             User_Agent_Check uAC = new User_Agent_Check(request.getHeader("user-agent"));
-            Referer_Check RC = new Referer_Check(request.getHeader("referer"),"/servlet02/login.html");
-            if (uAC.check()){
+            Referer_Check RC = new Referer_Check(request.getHeader("referer"), "/servlet02/login.html");
+            if (uAC.check()) {
                 response.sendRedirect("403.html");//user_agent
                 SpiderState = 1;
-            } else if (RC.check()){
+            } else if (RC.check()) {
                 response.sendRedirect("403.html");//referer
                 SpiderState = 1;
             }
@@ -51,15 +52,15 @@ public class Login extends HttpServlet {
                     ps.setString(2, password);
                     rs = ps.executeQuery();
                     if (rs.next()) {
-                        HttpSession session = request.getSession() ;
-                        if (!session.isNew()){  //如果session不是新的，那么失效上一个session并再次创建
+                        HttpSession session = request.getSession();
+                        if (!session.isNew()) {  //如果session不是新的，那么失效上一个session并再次创建
                             session.invalidate();
-                            session = request.getSession() ;
+                            session = request.getSession();
                         }
                         session.setMaxInactiveInterval(60);//session时长设置为5分钟
-                        session.setAttribute("username",username);
-                        //response.sendRedirect("SUI");
-                        request.getRequestDispatcher("SUI").forward(request,response);
+                        session.setAttribute("username", username);
+                        response.sendRedirect("SUI");
+                        //request.getRequestDispatcher("SUI").forward(request,response);
                     } else {
                         response.sendRedirect("wrongpassword.html"); //重定向到密码错误页面
                     }
