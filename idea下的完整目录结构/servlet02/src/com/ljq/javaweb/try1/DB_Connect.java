@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class DB_Connect {
     public Connection connect(String path) throws SQLException, ClassNotFoundException, IOException {
-        /*
+/*
         FileInputStream in = new FileInputStream(path);
         Properties prop = new Properties();
         prop.load(in);
