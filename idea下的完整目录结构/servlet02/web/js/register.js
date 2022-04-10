@@ -1,6 +1,6 @@
 function check() {
     var username = document.getElementById("username").value;
-    if (username.length<=2){
+    if (username.length<2){
         alert("用户名过短，请重新输入！");
         return false;
     }

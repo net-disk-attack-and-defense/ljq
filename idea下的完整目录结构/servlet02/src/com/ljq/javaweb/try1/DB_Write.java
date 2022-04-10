@@ -8,11 +8,13 @@ import java.sql.SQLException;
 public class DB_Write {
     String username;
     String password;
+    String email;
     String path;
 
-    public DB_Write(String username, String password, String path) {
+    public DB_Write(String username, String password, String email, String path) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.path = path;
     }
 
@@ -27,15 +29,16 @@ public class DB_Write {
             conn = connect.connect(path);
 
             //检查用户名是否已经存在
-            Username_Check check = new Username_Check(username, path);
+            Email_Check check = new Email_Check(email, path);
             if (check.check()) {
                 ans = 1;
             } else {
-                String sql = "INSERT IGNORE INTO userinfo (UserName,Password) VALUES (?,?);";
+                String sql = "INSERT IGNORE INTO users (name,passwd,email) VALUES (?,?,?);";
                 ps = conn.prepareStatement(sql);
 
                 ps.setString(1, username);
                 ps.setString(2, password);
+                ps.setString(3,email);
                 int count = ps.executeUpdate();
 
                 ans = (count == 1 ? 2 : 3);
