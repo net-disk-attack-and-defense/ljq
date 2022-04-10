@@ -58,8 +58,8 @@ public class Login extends HttpServlet {
                             session.invalidate();//TODO 此方法只是删除ID属性值，未真正删除ID，尚不知会不会有问题
                             session = request.getSession();
                         }
-                        session.setMaxInactiveInterval(60);//session时长设置为5分钟
-                        session.setAttribute("username", rs.getString("name"));
+                        session.setMaxInactiveInterval(60);//session时长设置为5分
+                        session.setAttribute("username", rs.getString("name"))
                         response.sendRedirect("SUI");
                         //request.getRequestDispatcher("SUI").forward(request,response);
                     } else {
