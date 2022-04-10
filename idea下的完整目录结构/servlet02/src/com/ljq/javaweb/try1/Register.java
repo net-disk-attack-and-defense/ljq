@@ -32,17 +32,7 @@ public class Register extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String email = request.getParameter("email");
-            if (username.length() > 255) {
-                response.setContentType("text/html");
-                PrintWriter out = response.getWriter();
-                response.sendRedirect("register.html");
-            } else if (username.length() < 2) {
-                response.sendRedirect("register.html");
-            } else if (password.length() < 6) {
-                response.sendRedirect("register.html");
-            } else if (password.length() > 255) {
-                response.setContentType("text/html");
-                PrintWriter out = response.getWriter();
+            if (username.length() > 20 || username.length() <= 2 || password.length() < 6 || password.length() > 32 || email.length() > 32) {
                 response.sendRedirect("register.html");
             } else {
                 int register_state;
@@ -51,10 +41,10 @@ public class Register extends HttpServlet {
                     DB_Write try01 = new DB_Write(username, password, email, path);
                     register_state = try01.write();
                     switch (register_state) {
-                        case 0: response.sendRedirect("ServerError.html");
-                        case 1: response.sendRedirect("EmailExist.html");
-                        case 2: response.sendRedirect("SignUpSuccess.html");
-                        case 3: response.sendRedirect("SignUpFail.html");
+                        case 0 -> response.sendRedirect("ServerError.html");
+                        case 1 -> response.sendRedirect("EmailExist.html");
+                        case 2 -> response.sendRedirect("SignUpSuccess.html");
+                        case 3 -> response.sendRedirect("SignUpFail.html");
                     }
                 } catch (Exception e) {
                     PrintWriter out = response.getWriter();

@@ -25,7 +25,7 @@ public class Email_Check {
         try {
             DB_Connect connect = new DB_Connect();
             conn = connect.connect(path);
-            String sql = "SELECT * FROM users WHERE email=?;";
+            String sql = "SELECT * FROM mypan.users WHERE Email=?;";
             ps = conn.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
